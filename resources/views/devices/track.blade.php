@@ -48,7 +48,11 @@
 
         async function loadDevices() {
             try {
-                const response = await fetch(`${apiBaseUrl}/api/devices`);
+                const response = await fetch(`${apiBaseUrl}/api/devices`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const devices = await response.json();
                 const deviceSelect = document.getElementById('device-select');
 
@@ -79,7 +83,11 @@
             document.getElementById('loading').style.display = 'block';
 
             try {
-                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/track?date=${date}`);
+                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/track?date=${date}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const data = await response.json();
 
                 displayPath(data.path);
@@ -99,7 +107,11 @@
             }
 
             try {
-                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/latest`);
+                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/latest`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 const data = await response.json();
 
                 appendLatestPoint(data.latest_point);

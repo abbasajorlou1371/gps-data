@@ -23,6 +23,9 @@
         }
     </style>
     <script>
+        const isProduction = window.location.hostname !== 'localhost';
+        const apiBaseUrl = isProduction ? 'https://gps.pistatapp.ir' : 'http://localhost:8000';
+
         let polyline = null;
         let markers = [];
         let map;
@@ -45,7 +48,7 @@
 
         async function loadDevices() {
             try {
-                const response = await fetch('/api/devices');
+                const response = await fetch(`${apiBaseUrl}/api/devices`);
                 const devices = await response.json();
                 const deviceSelect = document.getElementById('device-select');
 
@@ -76,7 +79,7 @@
             document.getElementById('loading').style.display = 'block';
 
             try {
-                const response = await fetch(`/api/devices/${imei}/track?date=${date}`);
+                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/track?date=${date}`);
                 const data = await response.json();
 
                 displayPath(data.path);
@@ -96,7 +99,7 @@
             }
 
             try {
-                const response = await fetch(`/api/devices/${imei}/latest`);
+                const response = await fetch(`${apiBaseUrl}/api/devices/${imei}/latest`);
                 const data = await response.json();
 
                 appendLatestPoint(data.latest_point);

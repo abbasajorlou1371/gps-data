@@ -57,12 +57,16 @@ class DeviceController extends Controller
     public function latest($imei)
     {
         $device = Device::where('imei', $imei)->firstOrFail();
-        $latestReport = Report::where('device_id', $device->id)->latest()->first();
-        $statistics = Statistics::where('device_id', $latestReport->device_id)->latest()->first();
+
+        $latestReport = Report::where('device_id', $device->id)->latest()->firstOrFail();
+
+        $statistics = Statistics::where('device_id', $device->id)->latest()->first();
 
         return response()->json([
-            'latest_point' => $latestReport,
-            'statistics' => $statistics
+            'latest_point' => $latestReport->only(['coordinates', 'speed', 'status', 'time']),
+            'statistics' => $statistics ? $statistics->only([
+                'total_distance', 'stoppage_count', 'stoppage_duration', 'moving_duration', 'max_speed'
+            ]) : null
         ]);
     }
 }
